@@ -2,7 +2,7 @@
   "name": "portlet",
   "version": "0.0.1",
   "description": "",
-  "main": "index.js",
+  "main": "test/server.js",
   "scripts": {
     "test": "node test/server.js"
   },

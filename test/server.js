@@ -1,7 +1,6 @@
-var static = require('node-static'),
-	exec   = require('child_process').exec;
-
-var fileServer = new static.Server('../');
+var stat       = require('node-static'),
+	exec       = require('child_process').exec,
+	fileServer = new stat.Server('../');
 
 require('http').createServer(function (request, response) {
     request.addListener('end', function () {
