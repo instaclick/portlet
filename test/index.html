@@ -66,6 +66,8 @@
     <script>
       requirejs.config({
           baseUrl: '../',
+          //timestamp to avoid cache
+          urlArgs: 'f='+(new Date()).getTime(),
           paths: {
             jquery: 'bower_components/jquery/jquery',
             main: 'test/main',
