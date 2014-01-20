@@ -1,28 +1,26 @@
 define(
 	[
 		'jquery',
+		'jquery.eventCloner'
 	],
 	function ($) {
 		'use strict';
 
 		var ajaxList = {};
 
-		var Portlet = function ($context, selector) {
+		var Portlet = function (selector) {
 			var $element = (typeof selector === 'string')
-					? this.$context.find(selector)
+					? $(selector)
 					: selector;
 
-			this.initialize($context, $element);
+			this.initialize($element);
 		};
 
-		Portlet.fromHtml = function (html, $context) {
-			return new Portlet($context || $(document), $(html));
+		Portlet.fromHtml = function (html) {
+			return new Portlet($(html));
 		};
 
 		$.extend(Portlet.prototype, {
-			getContext: function () {
-				return this.$context;
-			},
 			getElement: function () {
 				return this.$element;
 			},
@@ -34,14 +32,9 @@ define(
 			hasConfig: function (item) {
 				return (typeof this.config[item] !== 'undefined');
 			},
-			initialize: function ($context, $element) {
-				var name;
-
-				this.$context = $context;
+			initialize: function ($element) {
 				this.$element = $element;
-				this.config = {};
-
-				$.extend(this.config, this.$element.data());
+				this.config = $.extend({}, this.$element.data());
 
 				this.abort();
 			},
@@ -57,14 +50,25 @@ define(
 				}
 			},
 			replaceWith: function (portlet) {
-				var $element = this.getElement();
+				var $target  = this.getElement(),
+					$element = (portlet.config) 
+								? portlet.getElement()
+								: portlet;
 
 				this.abort();
-				portlet.abort();
 
-				this.initialize(portlet.getContext(), portlet.getElement().clone());
+				if (portlet.abort) {
+					portlet.abort();
+				}
 
-				$element.replaceWith(this.getElement());
+				this.initialize($element.clone());
+
+				$element = this.getElement();
+
+				$element.eventCloner({
+					source: $target
+				});
+				$target.replaceWith($element);
 			},
 			load: function (animation) {
 				var method = this.hasConfig('method') ? this.getConfig('method') : 'GET',
@@ -88,11 +92,12 @@ define(
 						var $html = $(html);
 
 						if (this.$element) {
-							this.$element.replaceWith($html);
+							this.replaceWith($html);
+
+							return;
 						}
 
-						// We need to assign jqueryfied html, otherwise element points to old DOM
-						this.$element = $html;
+						this.initialize($html);
 					},
 					error: function (xhr, status) {
 						// Do nothing
@@ -108,7 +113,11 @@ define(
 				});
 			},
 			on: function (name, selector, handler) {
-				this.$context.on(name, selector, handler);
+				var self = this;
+
+				this.$element.on(name, selector, function (e) {
+					handler(e, self);
+				});
 			},
 		});
 

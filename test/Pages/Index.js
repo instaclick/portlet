@@ -14,13 +14,14 @@ define(
 			Portlets.initialize();
 
 			Portlets.get('SignInForm').on(
-				'submit', 
-				'form', 
-				function (e) {
+				'click',
+				'input:submit',
+				function (e, portlet) {
 					e.preventDefault();
 					e.stopPropagation();
 
-					Portlets.get('SignInForm').replaceWith(Portlets.get('SuccessNotification'));
+					portlet.load();
+					// Portlets.get('SignInForm').replaceWith(Portlets.get('SuccessNotification'));
 				}
 			);
 		};

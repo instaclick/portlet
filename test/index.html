@@ -11,7 +11,7 @@
       <div>
         <h1>Portlet test</h1>
 
-        <section class="portlet" data-name="SuccessNotification" data-uri="/portlets/signin/success.html">
+        <section class="portlet" data-name="SuccessNotification" data-uri="test/index.html">
           <div>
             <div>
               <strong>Success Message!</strong>
@@ -19,11 +19,11 @@
               Let's have a party!!!
             </div>
 
-            <button type="button" rel="portlet-reset">Again!</button>
+            <input type="submit" value="Sign In">
           </div>
         </section>
 
-        <section class="portlet" data-name="SignInForm" data-uri="/portlets/signin/success.html">
+        <section class="portlet" data-name="SignInForm" data-uri="test/Portlets/error.html">
           <div>
             <div>
               <form>
@@ -61,13 +61,17 @@
     <script>
       requirejs.config({
           baseUrl: '../',
-          //timestamp to avoid cache
-          urlArgs: 'f='+(new Date()).getTime(),
           paths: {
             jquery: 'bower_components/jquery/jquery',
+            'jquery.eventCloner': 'src/jquery.eventCloner',
             main: 'test/main',
             Pages: 'test/Pages',
             Portlet: 'src/Portlet'
+          },
+          shim: {
+            'jquery.eventCloner': {
+              deps: ['jquery']
+            }
           }
       });
     </script>
