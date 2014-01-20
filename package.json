@@ -7,8 +7,5 @@
     "test": "node test/server.js"
   },
   "author": "",
-  "license": "MIT",
-  "devDependencies": {
-    "node-static": "~0.7.3"
-  }
+  "license": "MIT"
 }
