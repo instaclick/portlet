@@ -16,8 +16,8 @@
             this.element  = element;
             this.config   = $.extend({}, defaults, options);
             this.source   = (typeof this.config.source === 'string')
-                            ? $(this.config.source)
-                            : this.config.source;
+                ? $(this.config.source)
+                : this.config.source;
             this.eventList = $._data(this.source[0], 'events') || {};
 
             this.initialize();

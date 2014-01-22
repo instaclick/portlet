@@ -1,31 +1,32 @@
 define(
-	'Pages/Index',
-	[
-		'jquery',
-		'Portlet/Manager'
-	],
-	function ($, PortletManager) {
-		'use strict';
+    'Pages/Index',
+    [
+        'jquery',
+        'Portlet/Manager'
+    ],
+    function ($, PortletManager) {
+        'use strict';
 
-		var PageIndex = function () {
+        var PageIndex = function () {
 
-			var Portlets = new PortletManager($('body'));
+            var Portlets = new PortletManager($('body'));
 
-			Portlets.initialize();
+            Portlets.initialize();
 
-			Portlets.get('SignInForm').on(
-				'click',
-				'input:submit',
-				function (e) {
-					e.preventDefault();
-					e.stopPropagation();
+            Portlets.get('SignInForm').on(
+                'click',
+                'input:submit',
+                function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
 
-					this.load();
-					// Portlets.get('SignInForm').replaceWith(Portlets.get('SuccessNotification'));
-				}
-			);
-		};
+                    this.load();
+                    // this.replaceWith(Portlets.get('SuccessNotification'));
+                }
 
-		return PageIndex;
-	}
+            );
+        };
+
+        return PageIndex;
+    }
 );

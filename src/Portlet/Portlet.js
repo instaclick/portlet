@@ -16,10 +16,6 @@ define(
             this.initialize($element);
         };
 
-        Portlet.fromHtml = function (html) {
-            return new Portlet($(html));
-        };
-
         $.extend(Portlet.prototype, {
             getElement: function () {
                 return this.$element;
@@ -35,8 +31,6 @@ define(
             initialize: function ($element) {
                 this.$element = $element;
                 this.config = $.extend({}, this.$element.data());
-
-                this.abort();
             },
             abort: function () {
                 var name = this.getConfig('name');
@@ -52,8 +46,8 @@ define(
             replaceWith: function (portlet) {
                 var $target  = this.getElement(),
                     $element = (portlet.config)
-                                ? portlet.getElement().clone()
-                                : portlet;
+                        ? portlet.getElement().clone()
+                        : portlet;
 
                 this.initialize($element);
 
