@@ -1,5 +1,5 @@
 /*
- *  jQuery moveEvent - v0.0.1
+ *  jQuery cloneEvent - v0.0.1
  *  https://github.com/instaclick
  *
  *  Under MIT License
@@ -7,11 +7,11 @@
 
 ;(function ($) {
 
-    var pluginName = "eventCloner",
+    var pluginName = "cloneEvent",
         defaults = {
             filter: false
         };
-    
+
     var Plugin = function (element, options) {
             this.element  = element;
             this.config   = $.extend({}, defaults, options);
@@ -21,9 +21,6 @@
             this.eventList = $._data(this.source[0], 'events') || {};
 
             this.initialize();
-        },
-        addEvent = function (element, type, action) {
-            $.event.add(element, type, action);
         };
 
     Plugin.prototype = {
@@ -33,7 +30,7 @@
             for (var type in events) {
                 if (events.hasOwnProperty(type)) {
                     for (var i = 0, l = events[ type ].length; i < l; i++ ) {
-                        addEvent(this.element, type, events[type][i]);
+                        $.event.add(this.element, type, events[type][i]);
                     }
                 }
             }

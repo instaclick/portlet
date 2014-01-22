@@ -16,11 +16,11 @@ define(
 			Portlets.get('SignInForm').on(
 				'click',
 				'input:submit',
-				function (e, portlet) {
+				function (e) {
 					e.preventDefault();
 					e.stopPropagation();
 
-					portlet.load();
+					this.load();
 					// Portlets.get('SignInForm').replaceWith(Portlets.get('SuccessNotification'));
 				}
 			);

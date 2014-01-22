@@ -1,126 +1,116 @@
 define(
-	[
-		'jquery',
-		'jquery.eventCloner'
-	],
-	function ($) {
-		'use strict';
+    [
+        'jquery',
+        'jquery.cloneEvent'
+    ],
+    function ($) {
+        'use strict';
 
-		var ajaxList = {};
+        var ajaxList = {};
 
-		var Portlet = function (selector) {
-			var $element = (typeof selector === 'string')
-					? $(selector)
-					: selector;
+        var Portlet = function (selector) {
+            var $element = (typeof selector === 'string')
+                    ? $(selector)
+                    : selector;
 
-			this.initialize($element);
-		};
+            this.initialize($element);
+        };
 
-		Portlet.fromHtml = function (html) {
-			return new Portlet($(html));
-		};
+        Portlet.fromHtml = function (html) {
+            return new Portlet($(html));
+        };
 
-		$.extend(Portlet.prototype, {
-			getElement: function () {
-				return this.$element;
-			},
-			getConfig: function (item) {
-				return this.hasConfig(item)
-					? this.config[item]
-					: this.config;
-			},
-			hasConfig: function (item) {
-				return (typeof this.config[item] !== 'undefined');
-			},
-			initialize: function ($element) {
-				this.$element = $element;
-				this.config = $.extend({}, this.$element.data());
+        $.extend(Portlet.prototype, {
+            getElement: function () {
+                return this.$element;
+            },
+            getConfig: function (item) {
+                return this.hasConfig(item)
+                    ? this.config[item]
+                    : this.config;
+            },
+            hasConfig: function (item) {
+                return (typeof this.config[item] !== 'undefined');
+            },
+            initialize: function ($element) {
+                this.$element = $element;
+                this.config = $.extend({}, this.$element.data());
 
-				this.abort();
-			},
-			abort: function () {
-				var name = this.getConfig('name');
+                this.abort();
+            },
+            abort: function () {
+                var name = this.getConfig('name');
 
-				if (ajaxList[name]) {
-					ajaxList[name].abort();
+                if (ajaxList[name]) {
+                    ajaxList[name].abort();
 
-					ajaxList[name] = null;
+                    ajaxList[name] = null;
 
-					delete ajaxList[name];
-				}
-			},
-			replaceWith: function (portlet) {
-				var $target  = this.getElement(),
-					$element = (portlet.config) 
-								? portlet.getElement()
-								: portlet;
+                    delete ajaxList[name];
+                }
+            },
+            replaceWith: function (portlet) {
+                var $target  = this.getElement(),
+                    $element = (portlet.config)
+                                ? portlet.getElement().clone()
+                                : portlet;
 
-				this.abort();
+                this.initialize($element);
 
-				if (portlet.abort) {
-					portlet.abort();
-				}
+                $element.cloneEvent({
+                    source: $target
+                });
+                $target.replaceWith($element);
+            },
+            load: function (animation) {
+                var method = this.hasConfig('method') ? this.getConfig('method') : 'GET',
+                    cache  = this.hasConfig('cache') ? this.getConfig('cache') : true,
+                    name   = this.getConfig('name'),
+                    uri    = this.getConfig('uri');
 
-				this.initialize($element.clone());
+                this.abort();
 
-				$element = this.getElement();
+                ajaxList[name] = $.ajax({
+                    url:      uri,
+                    type:     method,
+                    dataType: 'html',
+                    cache:    cache,
+                    context:  this,
+                    beforeSend: function (xhr, settings) {
+                        // Deal with Animation
+                        animation && animation.start(this);
+                    },
+                    success: function (html) {
+                        var $html = $(html);
 
-				$element.eventCloner({
-					source: $target
-				});
-				$target.replaceWith($element);
-			},
-			load: function (animation) {
-				var method = this.hasConfig('method') ? this.getConfig('method') : 'GET',
-					cache  = this.hasConfig('cache') ? this.getConfig('cache') : true,
-					name   = this.getConfig('name'),
-					uri    = this.getConfig('uri');
+                        if (this.$element) {
+                            this.replaceWith($html);
 
-				this.abort();
+                            return;
+                        }
 
-				ajaxList[name] = $.ajax({
-					url:      uri,
-					type:     method,
-					dataType: 'html',
-					cache:    cache,
-					context:  this,
-					beforeSend: function (xhr, settings) {
-						// Deal with Animation
-						animation && animation.start(this);
-					},
-					success: function (html) {
-						var $html = $(html);
+                        this.initialize($html);
+                    },
+                    error: function (xhr, status) {
+                        // Do nothing
+                    },
+                    complete: function (xhr, status) {
+                        // Deal with Animation
+                        animation && animation.end(this);
 
-						if (this.$element) {
-							this.replaceWith($html);
+                        ajaxList[name] = null;
 
-							return;
-						}
+                        delete ajaxList[name];
+                    }
+                });
+            },
+            on: function (name, selector, handler) {
+                var self = this;
 
-						this.initialize($html);
-					},
-					error: function (xhr, status) {
-						// Do nothing
-					},
-					complete: function (xhr, status) {
-						// Deal with Animation
-						animation && animation.end(this);
+                this.$element.on(name, selector, $.proxy(handler, this));
+            },
+        });
 
-						ajaxList[name] = null;
-
-						delete ajaxList[name];
-					}
-				});
-			},
-			on: function (name, selector, handler) {
-				var self = this;
-
-				this.$element.on(name, selector, function (e) {
-					handler(e, self);
-				});
-			},
-		});
-
-		return Portlet;
-	}
+        return Portlet;
+    }
 );
