@@ -2,6 +2,7 @@ var http  = require("http"),
     url   = require("url"),
     path  = require("path"),
     fs    = require("fs"),
+    mimer = require('mimer'),
     spawn = require('child_process').spawn,
     port  = process.argv[2] || 9000;
 
@@ -28,17 +29,7 @@ http.createServer(function(request, response) {
         return;
       }
 
-      switch (path.extname(filename)) {
-        case '.html':
-          response.writeHead(200, {"Content-Type": "text/html"});
-        break;
-        case '.js':
-          response.writeHead(200, {"Content-Type": "application/javascript"});
-        break;
-        default:
-          response.writeHead(200);
-        break;
-      }
+      response.writeHead(200, {"Content-Type": mimer(filename)});
 
       response.write(file, "binary");
       response.end();
