@@ -49,12 +49,20 @@ define(
                         ? portlet.getElement().clone()
                         : portlet;
 
-                this.initialize($element);
+                if (ajaxList[this.getConfig('name')]) {
+                    this.abort();
+                }
+
+                if (portlet.config && (ajaxList[portlet.getConfig('name')])) {
+                    portlet.abort();
+                }
 
                 $element.cloneEvent({
                     source: $target
                 });
                 $target.replaceWith($element);
+
+                this.initialize($element);
             },
             load: function (animation) {
                 var method = this.hasConfig('method') ? this.getConfig('method') : 'GET',
@@ -99,8 +107,6 @@ define(
                 });
             },
             on: function (name, selector, handler) {
-                var self = this;
-
                 this.$element.on(name, selector, $.proxy(handler, this));
             },
         });
