@@ -16,6 +16,7 @@
   ],
   "dependencies": {
     "requirejs": "~2.1.10",
-    "jquery": "~2.0.3"
+    "jquery": "~2.0.3",
+    "jquery.cloneEvent": "~0.1.2"
   }
 }

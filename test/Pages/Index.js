@@ -20,8 +20,9 @@ define(
                     e.preventDefault();
                     e.stopPropagation();
 
-                    this.load();
-                    // this.replaceWith(Portlets.get('SuccessNotification'));
+                    // this.load();
+                    alert('Woww!!!');
+                    this.replaceWith(Portlets.get('SuccessNotification'), 'click hover submit');
                 }
 
             );

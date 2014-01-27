@@ -43,7 +43,7 @@ define(
                     delete ajaxList[name];
                 }
             },
-            replaceWith: function (portlet) {
+            replaceWith: function (portlet, cloneEventList) {
                 var $target  = this.getElement(),
                     $element = (portlet.config)
                         ? portlet.getElement().clone()
@@ -57,9 +57,10 @@ define(
                     portlet.abort();
                 }
 
-                $element.cloneEvent({
-                    source: $target
-                });
+                if (cloneEventList !== false) {
+                    $element.cloneEvent($target, cloneEventList || true);
+                }
+
                 $target.replaceWith($element);
 
                 this.initialize($element);

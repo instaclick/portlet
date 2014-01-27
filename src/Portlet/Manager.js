@@ -8,19 +8,9 @@ define(
 
         var PortletManager = function () {
             this.portletList = {};
-        },
-        load = function ($list, index) {
-            var $element = $list.eq(index);
-
-            this.add(PortletFactory.fromElement($element));
         };
 
         $.extend(PortletManager.prototype, {
-            create: function ($element, animation) {
-                var portlet = PortletFactory.fromElement($element);
-
-                portlet.load(animation);
-            },
             get: function (name) {
                 if (!name) {
                     return this.portletList;
@@ -42,10 +32,15 @@ define(
                 this.portletList[name] = portlet;
             },
             initialize: function () {
-                var $portletList = $('.portlet');
+                var $portletList = $('.portlet'),
+                    self         = this;
 
                 if ($portletList.length) {
-                    $portletList.map($.proxy(load, this, $portletList));
+                    $portletList.map(function (index) {
+                        var $element = $portletList.eq(index);
+
+                        self.add(PortletFactory.fromElement($element));
+                    });
                 }
                 this.found
             }

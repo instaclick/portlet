@@ -17,6 +17,9 @@ define(
                 this.fromElement($(html));
             },
             fromElement: function ($element) {
+                var portletClass = $element.data('portlet') || 'Portlet/Portlet',
+                    Portlet      = require(portletClass);
+
                 return new Portlet($element);
             }
         };
