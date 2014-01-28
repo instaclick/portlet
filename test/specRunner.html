@@ -1,0 +1,65 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../node_modules/mocha/mocha.css" />
+  </head>
+  <body>
+    <div id="mocha"></div>
+    <div id="fixtures" style="display:none"></div>
+
+    <script src="../bower_components/requirejs/require.js"></script>
+    <script src="../node_modules/mocha/mocha.js"></script>
+    <script>
+      requirejs.config({
+        baseUrl: '../',
+        paths: {
+          jquery: 'bower_components/jquery/jquery',
+          'jquery.cloneEvent': 'bower_components/jquery.cloneEvent/jquery.cloneEvent',
+          Pages: 'test/Pages',
+          Portlet: 'src/Portlet',
+          Specs: 'test/specs',
+          Chai: 'node_modules/chai/chai',
+          Testem: '/testem'
+        },
+        shim: {
+          'jquery.cloneEvent': {
+            deps: ['jquery']
+          }
+        }
+      });
+    </script>
+
+    <script>
+
+      function reloadFixtures(handler) {
+        $('#fixtures').load('fixtures.html', handler);
+      }
+
+      (function (require, mocha) {
+        var specList = [
+              'Specs/Manager.spec',
+              'Specs/Factory.spec'
+            ],
+            deps = [
+              'jquery',
+              'Chai',
+              'Testem'
+            ];
+
+        require(deps.concat(specList), function ($, Chai) {
+
+          window.expect = Chai.expect;
+
+          $(function () {
+            mocha.setup('bdd');
+            mocha.checkLeaks();
+            setTimeout(mocha.run, 300);
+          });
+        });
+
+      }(require, mocha));
+    </script>
+
+  </body>
+</html>
