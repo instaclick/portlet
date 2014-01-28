@@ -11,6 +11,11 @@
     <script src="../bower_components/requirejs/require.js"></script>
     <script src="../node_modules/mocha/mocha.js"></script>
     <script>
+
+      function reloadFixtures(handler) {
+        $('#fixtures').load('fixtures/fixtures.html', handler);
+      }
+
       requirejs.config({
         baseUrl: '../',
         paths: {
@@ -28,13 +33,6 @@
           }
         }
       });
-    </script>
-
-    <script>
-
-      function reloadFixtures(handler) {
-        $('#fixtures').load('fixtures.html', handler);
-      }
 
       (function (require, mocha) {
         var specList = [
