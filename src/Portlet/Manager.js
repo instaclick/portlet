@@ -42,7 +42,6 @@ define(
                         self.add(PortletFactory.fromElement($element));
                     });
                 }
-                this.found
             }
         });
 
