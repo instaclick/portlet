@@ -1,7 +1,8 @@
 define(
     [
         'jquery',
-        'jquery.cloneEvent'
+        'jquery.cloneEvent',
+        'jquery.eventEmitter'
     ],
     function ($) {
         'use strict';
@@ -14,9 +15,10 @@ define(
                     : selector;
 
             this.initialize($element);
-        };
+        },
+        Event = new $.eventEmitter();
 
-        $.extend(Portlet.prototype, {
+        $.extend(Portlet.prototype, Event, {
             getElement: function () {
                 return this.$element;
             },
@@ -31,6 +33,7 @@ define(
             initialize: function ($element) {
                 this.$element = $element;
                 this.config = $.extend({}, this.$element.data());
+                this.trigger('create');
             },
             abort: function () {
                 var name = this.getConfig('name');
@@ -64,6 +67,7 @@ define(
                 $target.replaceWith($element);
 
                 this.initialize($element);
+                this.trigger('replace');
             },
             load: function (animation) {
                 var method = this.hasConfig('method') ? this.getConfig('method') : 'GET',
@@ -82,6 +86,8 @@ define(
                     beforeSend: function (xhr, settings) {
                         // Deal with Animation
                         animation && animation.start(this);
+
+                        this.trigger('beforeLoad');
                     },
                     success: function (html) {
                         var $html = $(html);
@@ -95,7 +101,7 @@ define(
                         this.initialize($html);
                     },
                     error: function (xhr, status) {
-                        // Do nothing
+                        this.trigger('error');
                     },
                     complete: function (xhr, status) {
                         // Deal with Animation
@@ -103,13 +109,12 @@ define(
 
                         ajaxList[name] = null;
 
+                        this.trigger('complete');
+
                         delete ajaxList[name];
                     }
                 });
-            },
-            on: function (name, selector, handler) {
-                this.$element.on(name, selector, $.proxy(handler, this));
-            },
+            }
         });
 
         return Portlet;

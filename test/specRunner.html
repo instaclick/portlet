@@ -21,6 +21,7 @@
         paths: {
           jquery: 'bower_components/jquery/jquery',
           'jquery.cloneEvent': 'bower_components/jquery.cloneEvent/jquery.cloneEvent',
+          'jquery.eventEmitter': 'bower_components/jquery-eventemitter/jquery.eventemitter',
           Pages: 'test/Pages',
           Portlet: 'src/Portlet',
           Specs: 'test/specs',
@@ -30,12 +31,16 @@
         shim: {
           'jquery.cloneEvent': {
             deps: ['jquery']
+          },
+          'jquery.eventEmitter': {
+            deps: ['jquery']
           }
         }
       });
 
       (function (require, mocha) {
         var specList = [
+              'Specs/Portlet.spec',
               'Specs/Manager.spec',
               'Specs/Factory.spec',
               'Specs/Form.spec'
