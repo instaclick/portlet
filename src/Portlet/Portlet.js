@@ -1,39 +1,56 @@
 define(
     [
         'jquery',
-        'jquery.cloneEvent',
-        'jquery.eventEmitter'
+        'EventTarget',
+        'jquery.cloneEvent'
     ],
-    function ($) {
+    function ($, EventTarget) {
         'use strict';
 
         var ajaxList = {};
 
         var Portlet = function (selector) {
-            var $element = (typeof selector === 'string')
-                    ? $(selector)
-                    : selector;
+                EventTarget.call(this);
 
-            this.initialize($element);
-        },
-        Event = new $.eventEmitter();
+                var $element = (typeof selector === 'string')
+                        ? $(selector)
+                        : selector;
 
-        $.extend(Portlet.prototype, Event, {
+                this.initialize($element);
+            };
+
+        $.extend(Portlet.prototype, EventTarget.prototype, {
             getElement: function () {
                 return this.$element;
             },
+            setConfig: function (item, value) {
+                if ($.isPlainObject(item)) {
+                    this.config = value
+                        ? item
+                        : $.extend(this.config, item);
+
+                    return;
+                }
+
+                this.config[item] = value;
+
+                return this;
+            },
             getConfig: function (item) {
+                if (item === undefined) {
+                    return this.config;
+                }
+
                 return this.hasConfig(item)
                     ? this.config[item]
-                    : this.config;
+                    : undefined;
             },
             hasConfig: function (item) {
                 return (typeof this.config[item] !== 'undefined');
             },
             initialize: function ($element) {
                 this.$element = $element;
-                this.config = $.extend({}, this.$element.data());
-                this.trigger('create');
+                this.config   = $.extend({}, this.$element.data());
             },
             abort: function () {
                 var name = this.getConfig('name');
@@ -44,6 +61,8 @@ define(
                     ajaxList[name] = null;
 
                     delete ajaxList[name];
+
+                    this.dispatchEvent('load.abort');
                 }
             },
             replaceWith: function (portlet, cloneEventList) {
@@ -67,7 +86,7 @@ define(
                 $target.replaceWith($element);
 
                 this.initialize($element);
-                this.trigger('replace');
+                this.dispatchEvent('replace');
             },
             load: function (animation) {
                 var method = this.hasConfig('method') ? this.getConfig('method') : 'GET',
@@ -87,7 +106,7 @@ define(
                         // Deal with Animation
                         animation && animation.start(this);
 
-                        this.trigger('beforeLoad');
+                        this.dispatchEvent('load.start');
                     },
                     success: function (html) {
                         var $html = $(html);
@@ -99,9 +118,10 @@ define(
                         }
 
                         this.initialize($html);
+                        this.dispatchEvent('load.success');
                     },
                     error: function (xhr, status) {
-                        this.trigger('error');
+                        this.dispatchEvent('load.error');
                     },
                     complete: function (xhr, status) {
                         // Deal with Animation
@@ -109,7 +129,7 @@ define(
 
                         ajaxList[name] = null;
 
-                        this.trigger('complete');
+                        this.dispatchEvent('load.end');
 
                         delete ajaxList[name];
                     }
