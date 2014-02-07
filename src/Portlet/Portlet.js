@@ -94,11 +94,17 @@ define(
                     name   = this.getConfig('name'),
                     uri    = this.getConfig('uri');
 
+                // TODO: test case
+                if (!this.dispatchEvent('load')) {
+                    return;
+                }
+
                 this.abort();
 
                 ajaxList[name] = $.ajax({
                     url:      uri,
                     type:     method,
+                    data:     this.getConfig('data'),
                     dataType: 'html',
                     cache:    cache,
                     context:  this,

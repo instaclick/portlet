@@ -35,6 +35,14 @@ define(
                         $this.attr('disabled', null).removeAttr('disabled');
                     }
                 });
+            },
+            submit: function () {
+                this.setConfig('data', this.getElement().find('form').serialize());
+                this.addEventListener('load.start', function (event) {
+                    this.dispatchEvent('submit.start', event);
+                });
+
+                this.load();
             }
         });
 
