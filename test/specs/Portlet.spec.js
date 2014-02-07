@@ -25,7 +25,7 @@ require(
                     expect(portlet.getConfig('name')).to.eql('SuccessNotification');
                 });
 
-                it('Should get a config', function () {
+                it('Should get a full config', function () {
                     expect(portlet.getConfig()).to.eql({
                         name: 'SuccessNotification',
                         uri: '/test/fixtures/portlet-error.html',
