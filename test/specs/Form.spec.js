@@ -66,7 +66,7 @@ require(
                     $.ajax.restore();
                 });
 
-                it('should update a form with new elements', function (done) {
+                it('should submit a form', function (done) {
                     var emailValue    = 'foobar@foobar.com',
                         passwordValue = '123321';
 
@@ -78,25 +78,36 @@ require(
 
                         expect($.ajax.calledOnce).to.be.true;
                         expect(ajaxConfig.dataType).to.eql('html');
-                        expect(ajaxConfig.type).to.eql(portletForm.getConfig('method'));
                         expect(ajaxConfig.data.split('&')[0]).to.have.string(encodeURIComponent(emailValue));
                         expect(ajaxConfig.data.split('&')[1]).to.have.string(encodeURIComponent(passwordValue));
 
                         done();
                     });
 
-
-                    portletForm.setConfig('method', 'POST');
                     portletForm.submit();
                 });
 
-                // it('should submit a form and return a validation message', function (done) {
+                it('should update a form with new elements required by a field', function (done) {
+                    var $comboBox      = $('#comboBox'),
+                        emailValue    = 'foobar@foobar.com',
+                        passwordValue = '123321';
 
-                // });
+                    $comboBox.find('option')[1].setAttribute('selected', true);
 
-                // it('should submit a form and return a success message', function (done) {
+                    portletForm.addEventListener('update.start', function () {
+                        var ajaxConfig = $.ajax.getCall(0).args[0];
 
-                // });
+                        expect($.ajax.calledOnce).to.be.true;
+                        expect(ajaxConfig.dataType).to.eql('html');
+                        expect(ajaxConfig.data.split('&')[0]).to.have.string('updateField');
+                        expect(ajaxConfig.data.split('&')[1]).to.have.string('value2');
+
+                        done();
+                    });
+
+                    portletForm.updateField($comboBox);
+                });
+
             });
 
         });

@@ -38,11 +38,32 @@ define(
             },
             submit: function () {
                 this.setConfig('data', this.getElement().find('form').serialize());
+
+                if (this.hasConfig('method')) {
+                    this.setConfig('method', 'POST');
+                }
+
                 this.addEventListener('load.start', function (event) {
                     this.dispatchEvent('submit.start', event);
                 });
 
                 this.load();
+            },
+            updateField: function ($targetElement) {
+                var requestData = {
+                    action: 'updateField'
+                };
+
+                requestData[$targetElement.attr('name')] = $targetElement.val();
+
+                this.setConfig('data', $.param(requestData));
+
+                this.addEventListener('load.start', function (event) {
+                    this.dispatchEvent('update.start', event);
+                });
+
+                this.load();
+
             }
         });
 

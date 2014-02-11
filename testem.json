@@ -2,8 +2,8 @@
   "framework": "mocha",
   "test_page": "./test/specRunner.html",
   "src_files": [
-    "test/specRunner.html",
-    "test/specs/**/*.js",
+    "test/**/*.html",
+    "test/**/*.js",
     "src/**/*.js"
   ]
 }
