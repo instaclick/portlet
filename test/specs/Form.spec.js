@@ -78,6 +78,7 @@ require(
 
                         expect($.ajax.calledOnce).to.be.true;
                         expect(ajaxConfig.dataType).to.eql('html');
+                        expect(ajaxConfig.type).to.eql(portletForm.getConfig('method'));
                         expect(ajaxConfig.data.split('&')[0]).to.have.string(encodeURIComponent(emailValue));
                         expect(ajaxConfig.data.split('&')[1]).to.have.string(encodeURIComponent(passwordValue));
 
@@ -105,7 +106,7 @@ require(
                         done();
                     });
 
-                    portletForm.updateField($comboBox);
+                    portletForm.update($comboBox);
                 });
 
             });

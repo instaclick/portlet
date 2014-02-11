@@ -37,11 +37,11 @@ define(
                 });
             },
             submit: function () {
-                this.setConfig('data', this.getElement().find('form').serialize());
+                var $form  = this.getElement().find('form'),
+                    method = $form.attr('method') || 'POST';
 
-                if (this.hasConfig('method')) {
-                    this.setConfig('method', 'POST');
-                }
+                this.setConfig('data', $form.serialize())
+                    .setConfig('method', method);
 
                 this.addEventListener('load.start', function (event) {
                     this.dispatchEvent('submit.start', event);
@@ -49,7 +49,7 @@ define(
 
                 this.load();
             },
-            updateField: function ($targetElement) {
+            update: function ($targetElement) {
                 var requestData = {
                     action: 'updateField'
                 };
