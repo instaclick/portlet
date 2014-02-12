@@ -88,7 +88,7 @@ require(
                         $comboBox.find('option')[1].setAttribute('selected', true);
                     });
 
-                    it('should with a action without params', function (done) {
+                    it('should update with a action without params', function (done) {
 
                         portletForm.addEventListener('update.start', function () {
                             var httpRequest = this.httpRequest;
@@ -105,7 +105,7 @@ require(
                         portletForm.update();
                     });
 
-                    it('should with a action with params', function (done) {
+                    it('should update with a action with params', function (done) {
 
                         portletForm.getElement().find('form').attr('action', '/foo/bar?foo=1&bar=2')
 
