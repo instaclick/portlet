@@ -1,9 +1,8 @@
 /*global define */
 define(
-    'Bisna/Http/Request',
     [
         'jquery',
-        'Bisna/Event/Target'
+        'EventTarget'
     ],
     function ($, EventTarget)
     {
@@ -22,6 +21,8 @@ define(
 
             this.method       = method;
             this.url          = url;
+            this.contentType  = false;
+            this.dataType     = false;
             this.processData  = true;
             this.jqXHR        = null;
             this.async        = true;
@@ -50,9 +51,15 @@ define(
             /**
              * Define the HttpRequest request type.
              *
-             * @param type    HttpRequest request type string
+             * @param type    HttpRequest request type string or FALSE to use default
              */
             setRequestType: function (type) {
+                if (type === false) {
+                    this.contentType = false;
+
+                    return;
+                }
+
                 type = String(type).toLowerCase();
 
                 switch (type) {
@@ -165,6 +172,8 @@ define(
                 var config = this.compile();
 
                 if (this.dispatchEvent('load.start', null)) {
+                    this.abort();
+
                     this.jqXHR = $.ajax(config);
 
                     return this.jqXHR;
@@ -196,7 +205,10 @@ define(
                 config.async       = this.async;
 
                 config.success = function (response, textStatus, jqXHR) {
-                    var body = {
+                    var eventName = jqXHR.status < 300 ? 'success' : 'redirect',
+                        body;
+
+                    body = {
                         response:     response,
                         textStatus:   textStatus,
                         jqXHR:        jqXHR,
@@ -204,10 +216,7 @@ define(
                     };
 
                     self.dispatchEvent('load.end', null);
-                    self.dispatchEvent(
-                        jqXHR.status < 300 ? 'success' : 'redirect',
-                        body
-                    );
+                    self.dispatchEvent(eventName, body);
                 };
 
                 config.error = function (jqXHR, textStatus, errorThrown) {
@@ -233,19 +242,12 @@ define(
                     self.dispatchEvent('error', body);
                 };
 
-                config.complete = function (response, textStatus, jqXHR) {
-                    var response = jqXHR.responseText,
-                        body;
-
-                    body = {
-                        response:     response,
-                        textStatus:   textStatus,
-                        jqXHR:        jqXHR,
-                        originalData: config.data,
-                        errorThrown:  errorThrown
+                config.complete = function (jqXHR, textStatus) {
+                    var body = {
+                        textStatus: textStatus,
+                        jqXHR:      jqXHR,
                     };
 
-                    self.dispatchEvent('load.end', null);
                     self.dispatchEvent('complete', body);
                 };
 
@@ -275,6 +277,10 @@ define(
              */
             abort: function () {
                 if (!this.jqXHR) {
+                    return;
+                }
+
+                if (!this.dispatchEvent('load.abort', null)) {
                     return;
                 }
 

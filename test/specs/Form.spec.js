@@ -58,14 +58,6 @@ require(
 
             describe('Request actions', function () {
 
-                beforeEach(function () {
-                    sinon.spy($, 'ajax');
-                });
-
-                afterEach(function () {
-                    $.ajax.restore();
-                });
-
                 it('should submit a form', function (done) {
                     var emailValue    = 'foobar@foobar.com',
                         passwordValue = '123321';
@@ -74,13 +66,13 @@ require(
                     portletForm.getElement().find('[name="password"]').val(passwordValue);
 
                     portletForm.addEventListener('submit.start', function () {
-                        var ajaxConfig = $.ajax.getCall(0).args[0];
+                        var httpRequest = this.httpRequest;
 
-                        expect($.ajax.calledOnce).to.be.true;
-                        expect(ajaxConfig.dataType).to.eql('html');
-                        expect(ajaxConfig.type).to.eql(portletForm.getConfig('method'));
-                        expect(ajaxConfig.data.split('&')[0]).to.have.string(encodeURIComponent(emailValue));
-                        expect(ajaxConfig.data.split('&')[1]).to.have.string(encodeURIComponent(passwordValue));
+                        expect(httpRequest.dataType).to.eql('html');
+                        expect(httpRequest.method).to.eql('POST');
+                        expect(httpRequest.url).to.eql('/foo/bar');
+                        expect(httpRequest.data.split('&')[0]).to.have.string(encodeURIComponent(emailValue));
+                        expect(httpRequest.data.split('&')[1]).to.have.string(encodeURIComponent(passwordValue));
 
                         done();
                     });
@@ -88,25 +80,49 @@ require(
                     portletForm.submit();
                 });
 
-                it('should update a form with new elements required by a field', function (done) {
-                    var $comboBox      = $('#comboBox'),
-                        emailValue    = 'foobar@foobar.com',
-                        passwordValue = '123321';
+                describe('update a form', function () {
+                    var $comboBox = null;
 
-                    $comboBox.find('option')[1].setAttribute('selected', true);
-
-                    portletForm.addEventListener('update.start', function () {
-                        var ajaxConfig = $.ajax.getCall(0).args[0];
-
-                        expect($.ajax.calledOnce).to.be.true;
-                        expect(ajaxConfig.dataType).to.eql('html');
-                        expect(ajaxConfig.data.split('&')[0]).to.have.string('updateField');
-                        expect(ajaxConfig.data.split('&')[1]).to.have.string('value2');
-
-                        done();
+                    beforeEach(function () {
+                        $comboBox = $('#comboBox');
+                        $comboBox.find('option')[1].setAttribute('selected', true);
                     });
 
-                    portletForm.update($comboBox);
+                    it('should with a action without params', function (done) {
+
+                        portletForm.addEventListener('update.start', function () {
+                            var httpRequest = this.httpRequest;
+
+                            expect(httpRequest.dataType).to.eql('html');
+                            expect(httpRequest.method).to.eql('POST');
+                            expect(httpRequest.url).to.eql('/foo/bar?updateField=1');
+                            expect(httpRequest.dataType).to.eql('html');
+                            expect(httpRequest.data.split('&')[3]).to.have.string('value2');
+
+                            done();
+                        });
+
+                        portletForm.update();
+                    });
+
+                    it('should with a action with params', function (done) {
+
+                        portletForm.getElement().find('form').attr('action', '/foo/bar?foo=1&bar=2')
+
+                        portletForm.addEventListener('update.start', function () {
+                            var httpRequest = this.httpRequest;
+
+                            expect(httpRequest.dataType).to.eql('html');
+                            expect(httpRequest.method).to.eql('POST');
+                            expect(httpRequest.url).to.eql('/foo/bar?foo=1&bar=2&updateField=1');
+                            expect(httpRequest.dataType).to.eql('html');
+                            expect(httpRequest.data.split('&')[3]).to.have.string('value2');
+
+                            done();
+                        });
+
+                        portletForm.update();
+                    });
                 });
 
             });

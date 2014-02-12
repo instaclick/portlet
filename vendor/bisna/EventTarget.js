@@ -1,5 +1,4 @@
 define(
-    'EventTarget',
     [],
     function () {
         "use strict";

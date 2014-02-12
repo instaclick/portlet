@@ -36,34 +36,36 @@ define(
                     }
                 });
             },
-            submit: function () {
+            update: function (animation) {
                 var $form  = this.getElement().find('form'),
-                    method = $form.attr('method') || 'POST';
+                    uri    = $form.attr('action') || '',
+                    config = {
+                        uri:       uri + (/\?+/i.test(uri) ? '&' : '?') + 'updateField=1',
+                        animation: animation,
+                        prefix:    'update'
+                    };
 
-                this.setConfig('data', $form.serialize())
-                    .setConfig('method', method);
-
-                this.addEventListener('load.start', function (event) {
-                    this.dispatchEvent('submit.start', event);
-                });
-
-                this.load();
+                this.asyncCall(config);
             },
-            update: function ($targetElement) {
-                var requestData = {
-                    action: 'updateField'
+            submit: function (animation) {
+                var config = {
+                    animation: animation,
+                    prefix:    'submit'
                 };
 
-                requestData[$targetElement.attr('name')] = $targetElement.val();
+                this.asyncCall(config);
+            },
+            asyncCall: function (config) {
+                var $form = this.getElement().find('form');
 
-                this.setConfig('data', $.param(requestData));
+                config = $.extend({
+                    requestType: $form.attr('enctype') || false,
+                    method:      $form.attr('method') || 'POST',
+                    uri:         $form.attr('action') || '#', // TODO: # will not work, fix me!
+                    data:        $form.serialize()
+                }, config);
 
-                this.addEventListener('load.start', function (event) {
-                    this.dispatchEvent('update.start', event);
-                });
-
-                this.load();
-
+                Portlet.prototype.asyncCall.call(this, config);
             }
         });
 

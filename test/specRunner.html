@@ -8,7 +8,7 @@
     <div id="mocha"></div>
     <div id="fixtures" style="display:none"></div>
 
-    <script src="../bower_components/requirejs/require.js"></script>
+    <script src="../vendor/bower_components/requirejs/require.js"></script>
     <script src="../node_modules/mocha/mocha.js"></script>
     <script src="../node_modules/sinon/pkg/sinon-1.8.1.js"></script>
     <script>
@@ -20,11 +20,12 @@
       requirejs.config({
         baseUrl: '../',
         paths: {
-          jquery: 'bower_components/jquery/jquery',
-          'jquery.cloneEvent': 'bower_components/jquery.cloneEvent/jquery.cloneEvent',
+          jquery: 'vendor/bower_components/jquery/jquery',
+          'jquery.cloneEvent': 'vendor/bower_components/jquery.cloneEvent/jquery.cloneEvent',
           Pages: 'test/Pages',
           Portlet: 'src/Portlet',
-          EventTarget: 'src/EventTarget',
+          HttpRequest: 'vendor/bisna/HttpRequest',
+          EventTarget: 'vendor/bisna/EventTarget',
           Specs: 'test/specs',
           Chai: 'node_modules/chai/chai',
           Testem: '/testem'

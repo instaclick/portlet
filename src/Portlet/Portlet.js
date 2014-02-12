@@ -2,9 +2,10 @@ define(
     [
         'jquery',
         'EventTarget',
+        'HttpRequest',
         'jquery.cloneEvent'
     ],
-    function ($, EventTarget) {
+    function ($, EventTarget, HttpRequest) {
         'use strict';
 
         var ajaxList = {};
@@ -20,6 +21,7 @@ define(
             };
 
         $.extend(Portlet.prototype, EventTarget.prototype, {
+            httpRequest: null,
             getElement: function () {
                 return this.$element;
             },
@@ -52,19 +54,6 @@ define(
                 this.$element = $element;
                 this.config   = $.extend({}, this.$element.data());
             },
-            abort: function () {
-                var name = this.getConfig('name');
-
-                if (ajaxList[name]) {
-                    ajaxList[name].abort();
-
-                    ajaxList[name] = null;
-
-                    delete ajaxList[name];
-
-                    this.dispatchEvent('load.abort');
-                }
-            },
             replaceWith: function (portlet, cloneEventList) {
                 var $target  = this.getElement(),
                     $element = (portlet.config)
@@ -90,56 +79,73 @@ define(
             },
             load: function (animation) {
                 var method = this.hasConfig('method') ? this.getConfig('method') : 'GET',
-                    cache  = this.hasConfig('cache') ? this.getConfig('cache') : true,
-                    name   = this.getConfig('name'),
-                    uri    = this.getConfig('uri');
+                    config = {
+                        requestType: 'html',
+                        method:      method,
+                        uri:         this.getConfig('uri'),
+                        data:        false,
+                        animation:   animation,
+                        prefix:      'load'
+                    };
 
-                // TODO: test case
-                if (!this.dispatchEvent('load')) {
+                this.asyncCall(config);
+            },
+            asyncCall: function (config) {
+                if (!this.dispatchEvent(config.prefix)) {
                     return;
                 }
 
-                this.abort();
+                if (this.httpRequest) {
+                    this.httpRequest.abort();
+                }
 
-                ajaxList[name] = $.ajax({
-                    url:      uri,
-                    type:     method,
-                    data:     this.getConfig('data'),
-                    dataType: 'html',
-                    cache:    cache,
-                    context:  this,
-                    beforeSend: function (xhr, settings) {
-                        // Deal with Animation
-                        animation && animation.start(this);
+                this.httpRequest = new HttpRequest(config.method, config.uri);
 
-                        this.dispatchEvent('load.start');
-                    },
-                    success: function (html) {
-                        var $html = $(html);
+                this.httpRequest.setRequestType(config.requestType);
+                this.httpRequest.setResponseType('html');
+                this.httpRequest.setData(config.data);
 
-                        if (this.$element) {
-                            this.replaceWith($html);
+                this.httpRequest.addEventListener('load.start', function (e) {
+                    config.animation && config.animation.dispatchEvent('start');
 
-                            return;
-                        }
+                    e.type = config.prefix + '.start';
 
-                        this.initialize($html);
-                        this.dispatchEvent('load.success');
-                    },
-                    error: function (xhr, status) {
-                        this.dispatchEvent('load.error');
-                    },
-                    complete: function (xhr, status) {
-                        // Deal with Animation
-                        animation && animation.end(this);
+                    this.dispatchEvent(e);
+                }, this);
 
-                        ajaxList[name] = null;
+                this.httpRequest.addEventListener('load.end', function (e) {
+                    config.animation && config.animation.dispatchEvent('end');
 
-                        this.dispatchEvent('load.end');
+                    e.type = config.prefix + '.end';
 
-                        delete ajaxList[name];
-                    }
-                });
+                    this.dispatchEvent(e);
+                }, this);
+
+                this.httpRequest.addEventListener('success', function (e) {
+                    var $html  = $(e.userData.response),
+                        action = (this.$element) ? 'replaceWith' : 'initialize';
+
+                    e.type = config.prefix + '.success';
+
+                    this[action]($html);
+                    this.dispatchEvent(e);
+                }, this);
+
+                this.httpRequest.addEventListener('error', function (e) {
+                    e.type = config.prefix + '.error';
+
+                    this.dispatchEvent(e);
+                }, this);
+
+                this.httpRequest.addEventListener('complete', function (e) {
+                    this.httpRequest = null;
+
+                    e.type = config.prefix + '.complete';
+
+                    this.dispatchEvent(e);
+                }, this);
+
+                this.httpRequest.send();
             }
         });
 
