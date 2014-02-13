@@ -97,7 +97,7 @@ require(
                             expect(httpRequest.method).to.eql('POST');
                             expect(httpRequest.url).to.eql('/foo/bar?updateField=1');
                             expect(httpRequest.dataType).to.eql('html');
-                            expect(httpRequest.data.split('&')[3]).to.have.string('value2');
+                            expect(httpRequest.data.split('&')[2]).to.have.string('value2');
 
                             done();
                         });
@@ -107,7 +107,7 @@ require(
 
                     it('should update with a action with params', function (done) {
 
-                        portletForm.getElement().find('form').attr('action', '/foo/bar?foo=1&bar=2')
+                        portletForm.getElement().find('form').attr('action', '/foo/bar?foo=1&bar=2');
 
                         portletForm.addEventListener('update.start', function () {
                             var httpRequest = this.httpRequest;
@@ -116,7 +116,28 @@ require(
                             expect(httpRequest.method).to.eql('POST');
                             expect(httpRequest.url).to.eql('/foo/bar?foo=1&bar=2&updateField=1');
                             expect(httpRequest.dataType).to.eql('html');
-                            expect(httpRequest.data.split('&')[3]).to.have.string('value2');
+                            expect(httpRequest.data.split('&')[2]).to.have.string('value2');
+
+                            done();
+                        });
+
+                        portletForm.update();
+                    });
+
+
+                    it('should not send password field values and keep it cached', function (done) {
+
+                        var expected = '&^T^&$%&5879895&$%^$7';
+
+                        portletForm.getElement().find('[name="password"]').val(expected);
+
+                        portletForm.addEventListener('update.start', function () {
+                            var httpRequest = this.httpRequest;
+
+                            expect(httpRequest.dataType).to.eql('html');
+                            expect(httpRequest.method).to.eql('POST');
+                            expect(httpRequest.url).to.eql('/foo/bar?updateField=1');
+                            expect(httpRequest.data).to.not.have.string(encodeURIComponent(expected));
 
                             done();
                         });

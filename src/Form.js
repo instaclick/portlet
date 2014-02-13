@@ -37,13 +37,26 @@ define(
                 });
             },
             update: function (animation) {
-                var $form  = this.getElement().find('form'),
-                    uri    = $form.attr('action') || '',
-                    config = {
+                var $form          = this.getElement().find('form'),
+                    $passwordField = $form.find('input:password'),
+                    passwordLen    = $passwordField.length,
+                    fieldValueList = $form.serializeArray(),
+                    uri            = $form.attr('action') || '',
+                    config         = {
                         uri:       uri + (/\?+/i.test(uri) ? '&' : '?') + 'updateField=1',
                         animation: animation,
                         prefix:    'update'
                     };
+
+                if (passwordLen) {
+                    fieldValueList = fieldValueList.filter(function (index) {
+                        for (var i = 0; i < passwordLen; i++) {
+                            return ($passwordField[i].getAttribute('name') !== index.name);
+                        }
+                    });
+
+                    config.data = $.param(fieldValueList);
+                }
 
                 this.asyncCall(config);
             },
