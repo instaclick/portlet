@@ -124,21 +124,23 @@ require(
                         portletForm.update();
                     });
 
-
                     it('should not send password field values and keep it cached', function (done) {
 
                         var expected = '&^T^&$%&5879895&$%^$7';
 
-                        portletForm.getElement().find('[name="password"]').val(expected);
+                        portletForm.getElement().find('input:password').val(expected);
+                        portletForm.getElement().find('form').attr('action', '/test/fixtures/portlet-form.html');
 
                         portletForm.addEventListener('update.start', function () {
                             var httpRequest = this.httpRequest;
 
                             expect(httpRequest.dataType).to.eql('html');
                             expect(httpRequest.method).to.eql('POST');
-                            expect(httpRequest.url).to.eql('/foo/bar?updateField=1');
+                            expect(httpRequest.url).to.eql('/test/fixtures/portlet-form.html?updateField=1');
                             expect(httpRequest.data).to.not.have.string(encodeURIComponent(expected));
-
+                        });
+                        portletForm.addEventListener('update.end', function () {
+                            expect(portletForm.getElement().find('input:password').val()).to.eql(expected);
                             done();
                         });
 

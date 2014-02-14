@@ -215,7 +215,6 @@ define(
                         originalData: config.data
                     };
 
-                    self.dispatchEvent('load.end', null);
                     self.dispatchEvent(eventName, body);
                 };
 
@@ -238,7 +237,6 @@ define(
                         errorThrown:  errorThrown
                     };
 
-                    self.dispatchEvent('load.end', null);
                     self.dispatchEvent('error', body);
                 };
 
@@ -249,6 +247,7 @@ define(
                     };
 
                     self.dispatchEvent('complete', body);
+                    self.dispatchEvent('load.end', null);
                 };
 
                 config.xhr = function () {

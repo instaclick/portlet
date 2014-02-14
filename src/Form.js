@@ -7,10 +7,36 @@ define(
         'use strict';
 
         var PortletForm = function ($element) {
-            Portlet.call(this, $element);
+                var passwordList = {};
 
-            this.addEventListener('load.start', this.disableButton);
-        };
+                Portlet.call(this, $element);
+
+                this.addEventListener('load.start', this.disableButton);
+                this.addEventListener('update.start', function () {
+                    passwordList = {};
+
+                    this.getElement().find('input:password').each(function () {
+                        passwordList[this.getAttribute('name')] = this.value;
+                    });
+                }, this);
+                this.addEventListener('update.success', function () {
+                    var $element = this.getElement(),
+                        $current = null;
+
+                    for (var password in passwordList) {
+                        if (passwordList.hasOwnProperty(password)) {
+                            $current = $element.find('[name="' + password + '"]');
+
+                            if ($current.length) {
+                                $current.val(passwordList[password]);
+                            }
+
+                            passwordList[password] = null;
+                            delete passwordList[password];
+                        }
+                    }
+                }, this);
+            };
 
         $.extend(PortletForm.prototype, Portlet.prototype, {
             getButtonList: function () {
@@ -39,7 +65,7 @@ define(
             update: function (animation) {
                 var $form          = this.getElement().find('form'),
                     $passwordField = $form.find('input:password'),
-                    passwordLen    = $passwordField.length,
+                    passwordLength = $passwordField.length,
                     fieldValueList = $form.serializeArray(),
                     uri            = $form.attr('action') || '',
                     config         = {
@@ -48,9 +74,9 @@ define(
                         prefix:    'update'
                     };
 
-                if (passwordLen) {
+                if (passwordLength) {
                     fieldValueList = fieldValueList.filter(function (index) {
-                        for (var i = 0; i < passwordLen; i++) {
+                        for (var i = 0; i < passwordLength; i++) {
                             return ($passwordField[i].getAttribute('name') !== index.name);
                         }
                     });
