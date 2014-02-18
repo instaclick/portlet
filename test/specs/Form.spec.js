@@ -85,7 +85,7 @@ require(
 
                     beforeEach(function () {
                         $comboBox = $('#comboBox');
-                        $comboBox.find('option')[1].setAttribute('selected', true);
+                        $comboBox.find('option').eq(1).prop('selected', true);
                     });
 
                     it('should update with a action without params', function (done) {
