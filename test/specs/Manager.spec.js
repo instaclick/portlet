@@ -34,6 +34,13 @@ require(
                     expect(portlet.getElement()).to.have.length(1);
                     expect(portlet.getConfig('name')).to.eql(name);
                 });
+
+                it('should get portlet List if the param "name" is empty', function () {
+                    var portlet = Portlets.get();
+
+                    expect(portlet).to.have.property('SuccessNotification');
+                    expect(portlet).to.have.property('SignInForm');
+                });
             });
 
             describe('#add', function () {
@@ -42,12 +49,11 @@ require(
 
                     expect(function () {
                         Portlets.add(portlet);
-                    }).to.throw(/already exists/);
+                    }).to.throw(/A Portlet called "SuccessNotification" already exists!/);
                 });
 
                 it('should not instance instance a portlet that already exist', function (done) {
                     $('#fixtures').load('/test/fixtures/portlet-error.html', function () {
-
                         var name         = 'ErrorNotification',
                             $error       = $('#' + name),
                             portlet      = new Portlet($error),
@@ -57,9 +63,9 @@ require(
 
                         errorPortlet = Portlets.get(name);
 
-                        expect(errorPortlet).to.have.property('$element');
-                        expect($error).to.eql(errorPortlet.getElement());
                         expect(errorPortlet.getElement()).to.have.length(1);
+                        expect($error).to.eql(errorPortlet.getElement());
+                        expect($error.html()).to.eql(errorPortlet.getElement().html());
                         expect(errorPortlet.getConfig('name')).to.eql(name);
 
                         done();
