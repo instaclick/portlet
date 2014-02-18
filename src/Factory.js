@@ -8,7 +8,15 @@ define(
 
         var PortletFactory = {
             fromURI: function (uri) {
-                var portlet = new Portlet(uri);
+                var portlet = new Portlet(uri),
+                    self    = this;
+
+                portlet.addEventListener('load.complete', function (e) {
+                    e.type = 'factory.complete';
+
+                    self.fromElement(this.getElement());
+                    this.dispatchEvent(e);
+                });
 
                 return portlet;
             },

@@ -19,6 +19,17 @@ require(
                 });
             });
 
+            it('should load an external portlet', function (done) {
+                var portlet = new Portlet('/test/fixtures/portlet-error.html');
+
+                portlet.addEventListener('load.complete', function () {
+                    expect(portlet.getElement()).to.have.length(1);
+                    expect(portlet.getConfig('name')).to.eql('ErrorNotification');
+
+                    done();
+                });
+            });
+
             describe('config', function () {
 
                 it('Should get a config', function () {

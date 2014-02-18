@@ -7,7 +7,7 @@ define(
         'use strict';
 
         var MyPortletClass = function ($element) {
-            this.initialize($element);
+            this.initialize.call(this, $element);
         };
 
         $.extend(MyPortletClass.prototype, Portlet.prototype, {
