@@ -3,15 +3,17 @@ define(
         'jquery',
         'Portlet/Portlet'
     ],
-    function ($) {
+    function ($, Portlet) {
         'use strict';
 
         var PortletFactory = {
-            fromURI: function (handler) {
-                return this.fromHTML(html);
+            fromURI: function (uri) {
+                var portlet = new Portlet(uri);
+
+                return portlet;
             },
             fromHTML: function (html) {
-                this.fromElement($(html));
+                return this.fromElement($(html));
             },
             fromElement: function ($element) {
                 var portletClass = $element.data('portlet') || 'Portlet/Portlet',
