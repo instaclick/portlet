@@ -2,17 +2,13 @@
   "name": "portlet",
   "version": "0.0.1",
   "description": "",
-  "main": "test/server.js",
   "scripts": {
     "test": "testem ci --launch Firefox"
   },
-  "author": "",
+  "author": "Instaclick Inc.",
   "license": "MIT",
   "devDependencies": {
-    "mimer": "~0.1.0",
     "mocha": "~1.17.1",
-    "gulp": "~3.5.0",
-    "gulp-uglify": "~0.2.0",
     "chai": "~1.8.1"
   }
 }
