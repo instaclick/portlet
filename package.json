@@ -4,7 +4,7 @@
   "description": "",
   "main": "test/server.js",
   "scripts": {
-    "test": "testem ci -l Firefox"
+    "test": "testem ci --launch Firefox"
   },
   "author": "",
   "license": "MIT",
