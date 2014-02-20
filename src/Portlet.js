@@ -13,20 +13,16 @@ define(
         var Portlet = function (selector) {
                 EventTarget.call(this);
 
-                if (typeof selector === 'string') {
-                    this.setConfig({
-                        uri: selector
-                    });
-                    this.load();
+                var $element = (typeof selector === 'string')
+                    ? this.$context.find(selector)
+                    : selector;
 
-                    return;
-                }
-
-                this.initialize(selector);
+                this.initialize($element);
             };
 
         $.extend(Portlet.prototype, EventTarget.prototype, {
             httpRequest: null,
+            config: {},
             getElement: function () {
                 return this.$element;
             },

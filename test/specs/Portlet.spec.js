@@ -6,6 +6,11 @@ require(
     function ($, Portlet) {
         'use strict';
 
+
+        // TODO: create a test case without config
+
+
+
         describe('Portlet', function () {
 
             var $SuccessNotification = null,
@@ -15,17 +20,6 @@ require(
                 reloadFixtures(function () {
                     $SuccessNotification = $('#SuccessNotification');
                     portlet              = new Portlet($SuccessNotification);
-                    done();
-                });
-            });
-
-            it('should load an external portlet', function (done) {
-                var portlet = new Portlet('/test/fixtures/portlet-error.html');
-
-                portlet.addEventListener('load.complete', function () {
-                    expect(portlet.getElement()).to.have.length(1);
-                    expect(portlet.getConfig('name')).to.eql('ErrorNotification');
-
                     done();
                 });
             });

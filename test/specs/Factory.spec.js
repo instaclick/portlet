@@ -15,31 +15,6 @@ require(
                 });
             });
 
-            describe('#fromURI', function (done) {
-                it('should factory a portlet from a given uri with default portlet Class', function (done) {
-                    var portlet = PortletFactory.fromURI('/test/fixtures/portlet-error.html');
-
-                    portlet.addEventListener('factory.complete', function () {
-                        expect(portlet.getElement()).to.have.length(1);
-                        expect(portlet.getConfig('name')).to.eql('ErrorNotification');
-
-                        done();
-                    });
-                });
-
-                // it('should factory a portlet from a given uri with a specific portlet Class', function (done) {
-                //     var portlet = PortletFactory.fromURI('/test/fixtures/portlet-error.html');
-
-                //     portlet.addEventListener('factory.complete', function () {
-                //         expect(portlet.getElement()).to.have.length(1);
-                //         expect(portlet).to.have.property('myMethod');
-                //         expect(portlet.getConfig('name')).to.eql('ErrorNotification');
-
-                //         done();
-                //     });
-                // });
-            });
-
             describe('#fromHTML', function () {
                 it('should factory a portlet from a given html string with default portlet Class', function () {
                     var html    = $('#SuccessNotification')[0].outerHTML,
