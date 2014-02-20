@@ -6,11 +6,6 @@ require(
     function ($, Portlet) {
         'use strict';
 
-
-        // TODO: create a test case without config
-
-
-
         describe('Portlet', function () {
 
             var $SuccessNotification = null,
