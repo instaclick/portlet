@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "",
   "scripts": {
-    "test": "grunt jshint && testem ci --launch Firefox"
+    "test": "grunt jshint && grunt requirejs && testem ci --launch Firefox"
   },
   "author": "Instaclick Inc.",
   "license": "MIT",
