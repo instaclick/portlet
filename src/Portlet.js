@@ -1,8 +1,8 @@
 define(
     [
         'jquery',
-        'EventTarget',
-        'HttpRequest',
+        'Bisna/EventTarget',
+        'Bisna/HttpRequest',
         'jquery.cloneEvent'
     ],
     function ($, EventTarget, HttpRequest) {

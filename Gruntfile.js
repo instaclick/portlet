@@ -2,7 +2,7 @@ module.exports = function(grunt) {
 
   var config = {
     jshint: {
-      all: ['src/**/*.js'],
+      all: ['src/**/*.js', 'vendor/bisna/**/*.js'],
       options: {
         jshintrc: true
       }
@@ -17,8 +17,7 @@ module.exports = function(grunt) {
             jquery: 'vendor/bower_components/jquery/dist/jquery',
             'jquery.cloneEvent': 'vendor/bower_components/jquery.cloneEvent/jquery.cloneEvent',
             Portlet: 'src/',
-            HttpRequest: 'vendor/bisna/HttpRequest',
-            EventTarget: 'vendor/bisna/EventTarget'
+            Bisna: 'vendor/bisna'
           },
           exclude: ['jquery'],
           optimize: 'uglify'

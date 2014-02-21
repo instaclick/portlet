@@ -2,7 +2,7 @@
 define(
     [
         'jquery',
-        'EventTarget'
+        'Bisna/EventTarget'
     ],
     function ($, EventTarget)
     {
