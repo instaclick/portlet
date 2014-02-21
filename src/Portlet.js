@@ -13,9 +13,7 @@ define(
         var Portlet = function (selector) {
                 EventTarget.call(this);
 
-                var $element = (typeof selector === 'string')
-                    ? this.$context.find(selector)
-                    : selector;
+                var $element = (typeof selector === 'string') ? this.$context.find(selector) : selector;
 
                 this.initialize($element);
             };
@@ -28,9 +26,7 @@ define(
             },
             setConfig: function (item, value) {
                 if ($.isPlainObject(item)) {
-                    this.config = value
-                        ? item
-                        : $.extend(this.config, item);
+                    this.config = value ? item : $.extend(this.config, item);
 
                     return;
                 }
@@ -44,9 +40,7 @@ define(
                     return this.config;
                 }
 
-                return this.hasConfig(item)
-                    ? this.config[item]
-                    : undefined;
+                return this.hasConfig(item) ? this.config[item] : undefined;
             },
             hasConfig: function (item) {
                 return (typeof this.config[item] !== 'undefined');
@@ -57,9 +51,7 @@ define(
             },
             replaceWith: function (portlet, cloneEventList) {
                 var $target  = this.getElement(),
-                    $element = (portlet.config)
-                        ? portlet.getElement().clone()
-                        : portlet;
+                    $element = (portlet.config) ? portlet.getElement().clone() : portlet;
 
                 if (ajaxList[this.getConfig('name')]) {
                     this.abort();

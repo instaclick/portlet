@@ -3,12 +3,15 @@
   "version": "0.0.1",
   "description": "",
   "scripts": {
-    "test": "testem ci --launch Firefox"
+    "test": "grunt jshint && testem ci --launch Firefox"
   },
   "author": "Instaclick Inc.",
   "license": "MIT",
   "devDependencies": {
     "mocha": "~1.17.1",
-    "chai": "~1.8.1"
+    "chai": "~1.8.1",
+    "grunt": "~0.4.2",
+    "grunt-contrib-jshint": "~0.8.0",
+    "grunt-contrib-requirejs": "~0.4.1"
   }
 }
