@@ -2,11 +2,6 @@
   "name": "portlet",
   "version": "0.0.1",
   "description": "",
-  "scripts": {
-    "test": "grunt jshint && grunt requirejs && testem ci --launch Firefox && npm run-script coveralls",
-    "coverage": "node ./test/coverage/server.js",
-    "coveralls": "npm run-script coverage && cat ./test/coverage/result.lcov | ./node_modules/coveralls/bin/coveralls.js"
-  },
   "author": "Instaclick Inc.",
   "license": "MIT",
   "devDependencies": {
