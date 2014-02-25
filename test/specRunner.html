@@ -11,13 +11,27 @@
     <script src="../node_modules/requirejs/require.js"></script>
     <script src="../node_modules/mocha/mocha.js"></script>
     <script data-cover-only="//src/" src="../node_modules/blanket/dist/qunit/blanket.js"></script>
-    <script type="text/javascript" src="../node_modules/grunt-blanket-mocha/support/mocha-blanket.js"></script>
+    <script type="text/javascript" src="../vendor/mocha-blanket.js"></script>
     <script>
 
       mocha.setup('bdd');
 
-      if (window.PHANTOMJS) {
-        blanket.options("reporter", "../node_modules/grunt-blanket-mocha/support/grunt-reporter.js");
+      if (window.location.hash === '#lcov') {
+        window.lcov = '';
+        blanket.options("reporter", "../node_modules/blanket/src/reporters/lcov_reporter.js");
+
+        blanket._onTestsDone = blanket.onTestsDone;
+        blanket.onTestsDone = function () {
+          blanket._onTestsDone.apply(this, arguments);
+
+          $('.blanket_lcov_reporter').each(function(){ window.lcov += $(this).html().replace(/\<br\>/g, '\n'); });
+
+          var phantomMessageCallback = document.createEvent("Events");
+
+          phantomMessageCallback.initEvent('coverage.ready', true, true);
+          document.dispatchEvent(phantomMessageCallback);
+        }
+
       }
 
       function reloadFixtures(handler) {
@@ -29,7 +43,7 @@
         paths: {
           jquery: 'vendor/bower_components/jquery/dist/jquery',
           'jquery.cloneEvent': 'vendor/bower_components/jquery.cloneEvent/jquery.cloneEvent',
-          Portlet: 'src/',
+          Portlet: 'src',
           Bisna: 'vendor/bisna',
           Specs: 'test/specs',
           Chai: 'node_modules/chai/chai',
@@ -54,9 +68,12 @@
             ],
             deps = [
               'jquery',
-              'Chai',
-              'Testem'
+              'Chai'
             ];
+
+        if (window.location.hash !== '#lcov') {
+          deps.push('Testem');
+        }
 
         require(deps.concat(specList), function ($, Chai) {
 

@@ -23,14 +23,6 @@ module.exports = function(grunt) {
           optimize: 'uglify'
         }
       }
-    },
-    blanket_mocha: {
-      test: {
-        src: ['test/specRunner.html'],
-        options : {
-            threshold : 70
-        }
-      }
     }
   };
 
@@ -38,7 +30,6 @@ module.exports = function(grunt) {
 
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-requirejs');
-  grunt.loadNpmTasks('grunt-blanket-mocha');
 
   grunt.registerTask('default', ['jshint', 'requirejs']);
 

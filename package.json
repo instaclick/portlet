@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "description": "",
   "scripts": {
-    "test": "grunt jshint && grunt requirejs && testem ci --launch Firefox"
+    "test": "grunt jshint && grunt requirejs && testem ci --launch Firefox && npm run-script coveralls",
+    "coverage": "node ./test/coverage/server.js",
+    "coveralls": "npm run-script coverage && cat ./test/coverage/result.lcov | ./node_modules/coveralls/bin/coveralls.js"
   },
   "author": "Instaclick Inc.",
   "license": "MIT",
@@ -13,8 +15,8 @@
     "grunt": "~0.4.2",
     "grunt-contrib-jshint": "~0.8.0",
     "grunt-contrib-requirejs": "~0.4.1",
-    "grunt-blanket-mocha": "~0.4.0",
     "blanket": "~1.1.6",
-    "requirejs": "~2.1.11"
+    "mimer": "~0.1.1",
+    "coveralls": "~2.8.0"
   }
 }
