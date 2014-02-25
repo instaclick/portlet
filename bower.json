@@ -15,7 +15,6 @@
     "tests"
   ],
   "dependencies": {
-    "requirejs": "2.1.x",
     "jquery": "2.1.x",
     "jquery.cloneEvent": "0.1.x"
   }

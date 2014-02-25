@@ -8,9 +8,17 @@
     <div id="mocha"></div>
     <div id="fixtures" style="display:none"></div>
 
-    <script src="../vendor/bower_components/requirejs/require.js"></script>
+    <script src="../node_modules/requirejs/require.js"></script>
     <script src="../node_modules/mocha/mocha.js"></script>
+    <script data-cover-only="//src/" src="../node_modules/blanket/dist/qunit/blanket.js"></script>
+    <script type="text/javascript" src="../node_modules/grunt-blanket-mocha/support/mocha-blanket.js"></script>
     <script>
+
+      mocha.setup('bdd');
+
+      if (window.PHANTOMJS) {
+        blanket.options("reporter", "../node_modules/grunt-blanket-mocha/support/grunt-reporter.js");
+      }
 
       function reloadFixtures(handler) {
         $('#fixtures').load('fixtures/fixtures.html', handler);
@@ -53,9 +61,6 @@
         require(deps.concat(specList), function ($, Chai) {
 
           window.expect = Chai.expect;
-
-          mocha.setup('bdd');
-          mocha.checkLeaks();
           setTimeout(mocha.run, 2000);
         });
 
