@@ -8,8 +8,6 @@ define(
     function ($, EventTarget, HttpRequest) {
         'use strict';
 
-        var ajaxList = {};
-
         var Portlet = function (selector) {
                 EventTarget.call(this);
 
@@ -52,14 +50,6 @@ define(
             replaceWith: function (portlet, cloneEventList) {
                 var $target  = this.getElement(),
                     $element = (portlet.config) ? portlet.getElement().clone() : portlet;
-
-                if (ajaxList[this.getConfig('name')]) {
-                    this.abort();
-                }
-
-                if (portlet.config && (ajaxList[portlet.getConfig('name')])) {
-                    portlet.abort();
-                }
 
                 if (cloneEventList !== false) {
                     $element.cloneEvent($target, cloneEventList || true);
