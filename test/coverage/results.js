@@ -9,7 +9,7 @@ var fs   = require('fs');
 page.onLoadFinished = function(status){
     page.evaluateAsync(function () {
         document.addEventListener('coverage.ready', function () {
-            window.callPhantom(lcov);
+            window.callPhantom(_$blanket_LCOV);
         });
     });
 };

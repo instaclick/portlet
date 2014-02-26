@@ -18,16 +18,16 @@
 
       if (window.location.hash === '#lcov') {
         window.lcov = '';
-        blanket.options("reporter", "../node_modules/blanket/src/reporters/lcov_reporter.js");
+        blanket.options("reporter", "../vendor/lcov_reporter.js");
+        blanket.options("reporter_options", {
+          toHTML: false
+        });
 
         blanket._onTestsDone = blanket.onTestsDone;
         blanket.onTestsDone = function () {
-          blanket._onTestsDone.apply(this, arguments);
-
-          $('.blanket_lcov_reporter').each(function(){ window.lcov += $(this).html().replace(/\<br\>/g, '\n'); });
-
           var phantomMessageCallback = document.createEvent("Events");
 
+          blanket._onTestsDone.apply(this, arguments);
           phantomMessageCallback.initEvent('coverage.ready', true, true);
           document.dispatchEvent(phantomMessageCallback);
         }
