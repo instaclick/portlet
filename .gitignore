@@ -1,4 +1,3 @@
 /node_modules
 /npm-debug.log
 /vendor/bower_components
-/test/coverage/*.lcov

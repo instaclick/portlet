@@ -1,6 +1,7 @@
 var page = require('webpage').create();
 var url  = 'http://localhost:3637/test/specRunner.html#lcov';
 var fs   = require('fs');
+var cwd  = require('system').args[1] + '/';
 
 // page.onConsoleMessage = function (msg) {
 //     console.log(msg);
@@ -15,9 +16,9 @@ page.onLoadFinished = function(status){
 };
 
 page.onCallback = function (data) {
-    console.log(data);
     try {
-        fs.write('test/coverage/result.lcov', data)
+        data = data.replace(/\.\.\//g, cwd);
+        console.log(data);
     } catch(e) {
         console.log(e);
     }

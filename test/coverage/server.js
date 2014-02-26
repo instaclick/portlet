@@ -39,7 +39,7 @@ http.createServer(function(request, response) {
   });
 }).listen(parseInt(port, 10));
 
-phantomjs = spawn('phantomjs',['test/coverage/results.js']);
+phantomjs = spawn('phantomjs',['test/coverage/results.js', process.cwd()]);
 
 readline.createInterface({
   input     : phantomjs.stdout,
