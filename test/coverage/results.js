@@ -19,6 +19,7 @@ page.onCallback = function (data) {
     try {
         data = data.replace(/\.\.\//g, cwd);
         console.log(data);
+        fs.write(cwd + 'test/coverage/result.info', data);
     } catch(e) {
         console.log(e);
     }
