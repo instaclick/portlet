@@ -11,78 +11,8 @@
     <script src="../vendor/bower_components/requirejs/require.js"></script>
     <script src="../node_modules/mocha/mocha.js"></script>
     <script data-cover-only="/src/" src="../node_modules/blanket/dist/qunit/blanket.js"></script>
-    <script type="text/javascript" src="../vendor/mocha-blanket.js"></script>
-    <script>
-
-      mocha.setup('bdd');
-
-      if (window.location.hash === '#lcov') {
-        window.lcov = '';
-        blanket.options("reporter", "../vendor/lcov_reporter.js");
-        blanket.options("reporter_options", {
-          toHTML: false
-        });
-
-        blanket._onTestsDone = blanket.onTestsDone;
-        blanket.onTestsDone = function () {
-          var phantomMessageCallback = document.createEvent("Events");
-
-          blanket._onTestsDone.apply(this, arguments);
-          phantomMessageCallback.initEvent('coverage.ready', true, true);
-          document.dispatchEvent(phantomMessageCallback);
-        }
-
-      }
-
-      function reloadFixtures(handler) {
-        $('#fixtures').load('fixtures/fixtures.html', handler);
-      }
-
-      requirejs.config({
-        baseUrl: '../',
-        paths: {
-          jquery: 'vendor/bower_components/jquery/dist/jquery',
-          'jquery.cloneEvent': 'vendor/bower_components/jquery.cloneEvent/jquery.cloneEvent',
-          Portlet: 'src',
-          Bisna: 'vendor/bisna',
-          Specs: 'test/specs',
-          Chai: 'node_modules/chai/chai',
-          Testem: '/testem'
-        },
-        shim: {
-          'jquery.cloneEvent': {
-            deps: ['jquery']
-          },
-          'jquery.eventEmitter': {
-            deps: ['jquery']
-          }
-        }
-      });
-
-      (function (require, mocha) {
-        var specList = [
-              'Specs/Portlet.spec',
-              'Specs/Manager.spec',
-              'Specs/Factory.spec',
-              'Specs/Form.spec'
-            ],
-            deps = [
-              'jquery',
-              'Chai'
-            ];
-
-        if (window.location.hash !== '#lcov') {
-          deps.push('Testem');
-        }
-
-        require(deps.concat(specList), function ($, Chai) {
-
-          window.expect = Chai.expect;
-          setTimeout(mocha.run, 2000);
-        });
-
-      }(require, mocha));
-    </script>
-
+    <script src="../vendor/mocha-blanket.js"></script>
+    <script src="../node_modules/dexter/dist/dexter.min.js"></script>
+    <script src="../test/config.js"></script>
   </body>
 </html>

@@ -1,9 +1,10 @@
 require(
     [
         'jquery',
-        'Portlet/Portlet'
+        'Portlet/Portlet',
+        'Bisna/HttpRequest'
     ],
-    function ($, Portlet) {
+    function ($, Portlet, HttpRequest) {
         'use strict';
 
         describe('Portlet', function () {
@@ -62,7 +63,7 @@ require(
 
             });
 
-            describe('events', function () {
+            describe('async events', function () {
 
                 it('should call a event when a portlet request is done', function (done) {
                     portlet
@@ -99,6 +100,13 @@ require(
                             done();
                         })
                         .replaceWith(newPortlet);
+                });
+
+                it('should abort delayed portlet requests', function (done) {
+                    portlet.httpRequest = new HttpRequest('GET', 'foobar');
+
+                    Dexter.spy(portlet.httpRequest, 'abort', done);
+                    portlet.load();
                 });
 
             });
