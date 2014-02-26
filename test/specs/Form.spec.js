@@ -25,6 +25,7 @@ require(
                 });
 
                 it('should disable all buttons from a portlet', function () {
+                    portletForm.enableButton();
                     portletForm.disableButton();
 
                     expect(portletForm.getElement().find('[name="email"]').is(':enabled')).to.be.true;
@@ -34,6 +35,7 @@ require(
                 });
 
                 it('should enable all buttons from a portlet', function () {
+                    portletForm.disableButton();
                     portletForm.enableButton();
 
                     expect(portletForm.getButtonList().filter(':submit').is(':enabled')).to.be.true;

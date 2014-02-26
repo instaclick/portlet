@@ -65,6 +65,17 @@ require(
 
             describe('async events', function () {
 
+                it('should stop asyncCall if event prefix is not valid', function (done) {
+
+                    // mock an invalid dispatchEvent call
+                    portlet.dispatchEvent = function (eventName) {
+                        expect(eventName).to.eql('load');
+                        done();
+                    };
+
+                    portlet.load();
+                });
+
                 it('should call a event when a portlet request is done', function (done) {
                     portlet
                         .addEventListener('load.end', function () {
@@ -105,7 +116,11 @@ require(
                 it('should abort delayed portlet requests', function (done) {
                     portlet.httpRequest = new HttpRequest('GET', 'foobar');
 
-                    Dexter.spy(portlet.httpRequest, 'abort', done);
+                    var spy = Dexter.spy(portlet.httpRequest, 'abort', function () {
+                        expect(spy.called).to.eql(1);
+                        done();
+                    });
+
                     portlet.load();
                 });
 
