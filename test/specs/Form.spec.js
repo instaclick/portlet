@@ -48,6 +48,7 @@ require(
 
                     $submitButton.trigger('click');
                     expect(spy.called).to.eql(1);
+                    spy.restore();
                 });
             });
 
@@ -182,6 +183,23 @@ require(
                         });
 
                         portletForm.update();
+                    });
+
+                    it('should update and keep submit button event', function (done) {
+                        $DefaultForm.find('form').attr('action', '/test/fixtures/portlet-form.html');
+
+                        portletForm  = new PortletForm($DefaultForm);
+
+                        portletForm.submit();
+
+                        portletForm.addEventListener('submit.success', function () {
+                            var spy = Dexter.spy(portletForm, 'submit', function () {
+                                expect(spy.called).to.eql(1);
+                                spy.restore();
+                                done();
+                            });
+                            portletForm.getElement().find(':submit').trigger('click');
+                        });
                     });
 
                     it('should not send password field values and keep it cached', function (done) {

@@ -64,13 +64,9 @@ define(
                 });
             },
             getFormElement: function () {
-                var $form = this.getElement();
+                var $element = this.getElement();
 
-                if ($form.prop('tagName').toLowerCase() !== 'form') {
-                    $form = $form.find('form');
-                }
-
-                return $form;
+                return ($element.prop('tagName').toLowerCase() !== 'form') ? $element.find('form') : $element;
             },
             update: function (animation) {
                 var $form          = this.getFormElement(),
@@ -96,20 +92,6 @@ define(
 
                 this.asyncCall(config);
             },
-            delegateSubmitEvent: function () {
-                var $submitButton = this.getButtonList().filter(':submit'),
-                    self          = this;
-
-                if (!$submitButton.length) {
-                    return;
-                }
-
-                $submitButton.on('click', function (e) {
-                    e.preventDefault();
-
-                    self.submit();
-                });
-            },
             submit: function (animation) {
                 var config = {
                     animation: animation,
@@ -129,6 +111,13 @@ define(
                 }, config);
 
                 Portlet.prototype.asyncCall.call(this, config);
+            },
+            delegateSubmitEvent: function () {
+                this.getElement().on('click', ':submit', $.proxy(function (e) {
+                    e.preventDefault();
+
+                    this.submit();
+                }, this));
             }
         });
 
