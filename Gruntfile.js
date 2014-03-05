@@ -16,7 +16,7 @@ module.exports = function(grunt) {
           paths: {
             jquery: 'vendor/bower_components/jquery/dist/jquery',
             'jquery.cloneEvent': 'vendor/bower_components/jquery.cloneEvent/jquery.cloneEvent',
-            Portlet: 'src/',
+            Portlet: 'src',
             Bisna: 'vendor/bisna'
           },
           exclude: ['jquery'],

@@ -14,7 +14,7 @@ require(
             beforeEach(function (done) {
                 reloadFixtures(function () {
                     $DefaultForm = $('#DefaultForm');
-                    portletForm          = new PortletForm($DefaultForm);
+                    portletForm  = new PortletForm($DefaultForm);
                     done();
                 });
             });
@@ -40,6 +40,14 @@ require(
 
                     expect(portletForm.getButtonList().filter(':submit').is(':enabled')).to.be.true;
                     expect(portletForm.getButtonList().filter('button').is(':enabled')).to.be.true;
+                });
+
+                it('should delegate submit event to respective buttons', function () {
+                    var spy           = Dexter.spy(portletForm, 'submit'),
+                        $submitButton = portletForm.getElement().find('input:submit');
+
+                    $submitButton.trigger('click');
+                    expect(spy.called).to.eql(1);
                 });
             });
 
@@ -82,6 +90,33 @@ require(
                     portletForm.submit();
                 });
 
+                it('should submit a form as portlet tag', function (done) {
+                    reloadFixtures(function() {
+                        var emailValue    = 'foobar@foobar.com',
+                            passwordValue = '123321';
+
+                        $DefaultForm = $('#form');
+                        portletForm  = new PortletForm($DefaultForm);
+
+                        portletForm.getElement().find('[name="email"]').val(emailValue);
+                        portletForm.getElement().find('[name="password"]').val(passwordValue);
+
+                        portletForm.addEventListener('submit.start', function () {
+                            var httpRequest = this.httpRequest;
+
+                            expect(httpRequest.dataType).to.eql('html');
+                            expect(httpRequest.method).to.eql('POST');
+                            expect(httpRequest.url).to.eql('/foo/bar');
+                            expect(httpRequest.data.split('&')[0]).to.have.string(encodeURIComponent(emailValue));
+                            expect(httpRequest.data.split('&')[1]).to.have.string(encodeURIComponent(passwordValue));
+
+                            done();
+                        });
+
+                        portletForm.submit();
+                    }, 'fixtures/form.html');
+                });
+
                 describe('update a form', function () {
                     var $comboBox = null;
 
@@ -105,6 +140,29 @@ require(
                         });
 
                         portletForm.update();
+                    });
+
+                    it('should update a form as portlet tag', function (done) {
+                        reloadFixtures(function() {
+                            $DefaultForm = $('#form');
+                            portletForm  = new PortletForm($DefaultForm);
+
+                            $('#comboBox').find('option').eq(1).prop('selected', true);
+
+                            portletForm.addEventListener('update.start', function () {
+                                var httpRequest = this.httpRequest;
+
+                                expect(httpRequest.dataType).to.eql('html');
+                                expect(httpRequest.method).to.eql('POST');
+                                expect(httpRequest.url).to.eql('/foo/bar?updateField=1');
+                                expect(httpRequest.dataType).to.eql('html');
+                                expect(httpRequest.data.split('&')[2]).to.have.string('value2');
+
+                                done();
+                            });
+
+                            portletForm.update();
+                        }, 'fixtures/form.html');
                     });
 
                     it('should update with a action with params', function (done) {

@@ -19,8 +19,10 @@
     }
   }
 
-  window.reloadFixtures = function(handler) {
-    $('#fixtures').load('fixtures/fixtures.html', handler);
+  window.reloadFixtures = function(handler, uri) {
+    uri = uri || 'fixtures/fixtures.html';
+
+    $('#fixtures').load(uri, handler);
   }
 
   requirejs.config({
