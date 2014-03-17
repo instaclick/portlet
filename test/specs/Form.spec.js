@@ -108,6 +108,7 @@ require(
                             expect(httpRequest.dataType).to.eql('html');
                             expect(httpRequest.method).to.eql('POST');
                             expect(httpRequest.url).to.eql('/foo/bar');
+                            expect(httpRequest.contentType).to.eql('application/x-www-form-urlencoded; charset=UTF-8');
                             expect(httpRequest.data.split('&')[0]).to.have.string(encodeURIComponent(emailValue));
                             expect(httpRequest.data.split('&')[1]).to.have.string(encodeURIComponent(passwordValue));
 
@@ -134,6 +135,7 @@ require(
                             expect(httpRequest.dataType).to.eql('html');
                             expect(httpRequest.method).to.eql('POST');
                             expect(httpRequest.url).to.eql('/foo/bar?updateField=1');
+                            expect(httpRequest.contentType).to.eql('application/x-www-form-urlencoded; charset=UTF-8');
                             expect(httpRequest.dataType).to.eql('html');
                             expect(httpRequest.data.split('&')[2]).to.have.string('value2');
 
@@ -176,6 +178,7 @@ require(
                             expect(httpRequest.dataType).to.eql('html');
                             expect(httpRequest.method).to.eql('POST');
                             expect(httpRequest.url).to.eql('/foo/bar?foo=1&bar=2&updateField=1');
+                            expect(httpRequest.contentType).to.eql('application/x-www-form-urlencoded; charset=UTF-8');
                             expect(httpRequest.dataType).to.eql('html');
                             expect(httpRequest.data.split('&')[2]).to.have.string('value2');
 
@@ -215,6 +218,7 @@ require(
                             expect(httpRequest.dataType).to.eql('html');
                             expect(httpRequest.method).to.eql('POST');
                             expect(httpRequest.url).to.eql('/test/fixtures/portlet-form.html?updateField=1');
+                            expect(httpRequest.contentType).to.eql('application/x-www-form-urlencoded; charset=UTF-8');
                             expect(httpRequest.data).to.not.have.string(encodeURIComponent(expected));
                         });
                         portletForm.addEventListener('update.end', function () {
