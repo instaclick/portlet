@@ -75,6 +75,10 @@ define(
                     this.contentType = 'application/json; charset=utf-8';
                     break;
 
+                case"form":
+                    this.contentType = 'application/x-www-form-urlencoded; charset=UTF-8';
+                    break;
+
                 case 'formdata':
                     this.contentType = false;
                     this.processData = false; // Don't do any pre processing on FormData objects
