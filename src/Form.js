@@ -104,7 +104,7 @@ define(
                 var $form = this.getFormElement();
 
                 config = $.extend({
-                    requestType: $form.attr('enctype') || false,
+                    requestType: 'form',
                     method:      $form.attr('method') || 'POST',
                     uri:         $form.attr('action') || '#', // TODO: # will not work, fix me!
                     data:        $form.serialize()
