@@ -76,7 +76,7 @@ define(
                     break;
 
                 case"form":
-                    this.contentType="application/x-www-form-urlencoded; charset=UTF-8";
+                    this.contentType = 'application/x-www-form-urlencoded; charset=UTF-8';
                     break;
 
                 case 'formdata':
