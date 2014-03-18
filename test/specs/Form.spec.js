@@ -188,21 +188,20 @@ require(
                         portletForm.update();
                     });
 
-                    it('should update and keep submit button event', function (done) {
+                    it('should not run form default submit', function (done) {
+                        var spy = null;
+
                         $DefaultForm.find('form').attr('action', '/test/fixtures/portlet-form.html');
 
                         portletForm  = new PortletForm($DefaultForm);
 
-                        portletForm.submit();
-
-                        portletForm.addEventListener('submit.success', function () {
-                            var spy = Dexter.spy(portletForm, 'submit', function () {
-                                expect(spy.called).to.eql(1);
-                                spy.restore();
-                                done();
-                            });
-                            portletForm.getElement().find(':submit').trigger('click');
+                        spy = Dexter.spy(portletForm, 'submit', function () {
+                            expect(spy.called).to.eql(1);
+                            spy.restore();
+                            done();
                         });
+
+                        portletForm.getFormElement().trigger('submit');
                     });
 
                     it('should not send password field values and keep it cached', function (done) {

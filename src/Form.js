@@ -113,9 +113,8 @@ define(
                 Portlet.prototype.asyncCall.call(this, config);
             },
             delegateSubmitEvent: function () {
-                this.getElement().on('click', ':submit', $.proxy(function (e) {
-                    e.preventDefault();
-
+                this.getFormElement().on('submit', $.proxy(function (event) {
+                    event.preventDefault();
                     this.submit();
                 }, this));
             }
