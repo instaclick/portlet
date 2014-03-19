@@ -20,6 +20,6 @@
   },
   "private": true,
   "dependencies": {
-    "jquery.cloneevent": "instaclick/jquery.cloneEvent"
+    "jquery.cloneevent": "https://github.com/instaclick/jquery.cloneEvent/archive/master.tar.gz"
   }
 }
