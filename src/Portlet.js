@@ -33,12 +33,12 @@ define(
 
                 return this;
             },
-            getConfig: function (item) {
+            getConfig: function (item, defaultValue) {
                 if (item === undefined) {
                     return this.config;
                 }
 
-                return this.hasConfig(item) ? this.config[item] : undefined;
+                return this.hasConfig(item) ? this.config[item] : defaultValue;
             },
             hasConfig: function (item) {
                 return (typeof this.config[item] !== 'undefined');
@@ -61,15 +61,14 @@ define(
                 this.dispatchEvent('replace');
             },
             load: function (animation) {
-                var method = this.hasConfig('method') ? this.getConfig('method') : 'GET',
-                    config = {
-                        requestType: 'html',
-                        method:      method,
-                        uri:         this.getConfig('uri'),
-                        data:        false,
-                        animation:   animation,
-                        prefix:      'load'
-                    };
+                var config = {
+                    requestType: 'html',
+                    method:      this.getConfig('method', 'GET'),
+                    uri:         this.getConfig('uri'),
+                    data:        false,
+                    animation:   animation,
+                    prefix:      'load'
+                };
 
                 this.asyncCall(config);
             },
