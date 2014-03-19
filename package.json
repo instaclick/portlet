@@ -1,6 +1,6 @@
 {
   "name": "portlet",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "",
   "author": "Instaclick Inc.",
   "license": "MIT",
@@ -15,7 +15,8 @@
     "coveralls": "~2.8.0",
     "dexter": "~0.5.0",
     "requirejs": "~2.1.11",
-    "jquery": "~2.1.0"
+    "jquery": "~2.1.0",
+    "grunt-release": "~0.7.0"
   },
   "private": true,
   "dependencies": {
