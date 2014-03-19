@@ -9,16 +9,15 @@ Client-side support for [Portlet](http://en.wikipedia.org/wiki/Portlet)
 
 Be sure to have node.js 0.10.x
 
-Install bower, testem and grunt globally (may require root privileges)
+Install testem and grunt globally (may require root privileges)
 ```CLI
-$ npm install -g bower testem grunt-cli
+$ npm install -g testem grunt-cli
 ```
 
 Install internal dependencies
 ```CLI
 $ cd portlet
 $ npm install
-$ bower install
 ```
 
 Run test server
