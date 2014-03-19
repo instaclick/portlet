@@ -5,6 +5,13 @@ portlet
 
 Client-side support for [Portlet](http://en.wikipedia.org/wiki/Portlet)
 
+```CLI
+$ npm install instaclick/portlet
+```
+
+Then your portlet lib will be on
+node_modules/portlet/dist/portlet.min.js
+
 ## Contribute
 
 Be sure to have node.js 0.10.x
@@ -38,4 +45,9 @@ $ grunt jshint
 Generate minified version
 ```CLI
 $ grunt requirejs
+```
+
+Release new version (create git tag and update package.json)
+```CLI
+$ grunt release
 ```

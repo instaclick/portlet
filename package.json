@@ -20,6 +20,6 @@
   },
   "private": true,
   "dependencies": {
-    "jquery.cloneevent": "git://github.com/instaclick/jquery.cloneEvent"
+    "jquery.cloneevent": "instaclick/jquery.cloneEvent"
   }
 }
