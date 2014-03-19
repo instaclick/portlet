@@ -61,6 +61,10 @@ require(
                     expect(portlet.getConfig()).to.not.have.property('method');
                 });
 
+                it('Should use default value', function () {
+                    expect(portlet.getConfig('format')).to.not.be.ok;
+                    expect(portlet.getConfig('format', 'json')).to.eql('json');
+                });
             });
 
             describe('async events', function () {
