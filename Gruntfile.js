@@ -16,7 +16,7 @@ module.exports = function (grunt) {
                     out: "dist/portlet.min.js",
                     paths: {
                         jquery: 'node_modules/jquery/dist/jquery',
-                        'jquery.cloneEvent': 'node_modules/jquery.cloneevent/jquery.cloneEvent',
+                        'jquery.cloneEvent': 'node_modules/jquery.cloneEvent/jquery.cloneEvent',
                         Portlet: 'src',
                         Bisna: 'vendor/bisna'
                     },
