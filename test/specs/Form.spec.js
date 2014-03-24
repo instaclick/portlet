@@ -188,7 +188,7 @@ require(
                         portletForm.update();
                     });
 
-                    it('should not run form default submit', function (done) {
+                    it('should not run child form default submit', function (done) {
                         var spy = null;
 
                         $DefaultForm.find('form').attr('action', '/test/fixtures/portlet-form.html');
@@ -197,11 +197,39 @@ require(
 
                         spy = Dexter.spy(portletForm, 'submit', function () {
                             expect(spy.called).to.eql(1);
+
+                            // should have submit event attached to portlet element
+                            expect($._data(this.getElement()[0], 'events')).to.have.ownProperty('submit');
+
                             spy.restore();
                             done();
                         });
 
                         portletForm.getFormElement().trigger('submit');
+                    });
+
+                    it('should not run portlet form default submit', function (done) {
+                        reloadFixtures(function() {
+                            var spy = null;
+
+                            $DefaultForm = $('#form');
+
+                            $DefaultForm.find('form').attr('action', '/test/fixtures/portlet-form.html');
+
+                            portletForm  = new PortletForm($DefaultForm);
+
+                            spy = Dexter.spy(portletForm, 'submit', function () {
+                                expect(spy.called).to.eql(1);
+
+                                // should have submit event attached to portlet element
+                                expect($._data(this.getElement()[0], 'events')).to.have.ownProperty('submit');
+
+                                spy.restore();
+                                done();
+                            });
+
+                            portletForm.getFormElement().trigger('submit');
+                        }, 'fixtures/form.html');
                     });
 
                     it('should not send password field values and keep it cached', function (done) {

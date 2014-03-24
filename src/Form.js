@@ -113,10 +113,20 @@ define(
                 Portlet.prototype.asyncCall.call(this, config);
             },
             delegateSubmitEvent: function () {
-                this.getFormElement().on('submit', $.proxy(function (event) {
+                var $portlet   = this.getElement(),
+                    $form      = this.getFormElement(),
+                    eventParam = ['submit'];
+
+                if ($form !== $portlet) {
+                    eventParam.push('form');
+                }
+
+                eventParam.push($.proxy(function (event) {
                     event.preventDefault();
                     this.submit();
                 }, this));
+
+                $portlet.on.apply($portlet, eventParam);
             }
         });
 
