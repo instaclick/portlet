@@ -2,9 +2,10 @@ require(
     [
         'jquery',
         'Portlet/Portlet',
-        'Bisna/HttpRequest'
+        'Bisna/HttpRequest',
+        'dexter'
     ],
-    function ($, Portlet, HttpRequest) {
+    function ($, Portlet, HttpRequest, Dexter) {
         'use strict';
 
         describe('Portlet', function () {

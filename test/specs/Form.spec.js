@@ -1,9 +1,10 @@
 require(
     [
         'jquery',
-        'Portlet/Form'
+        'Portlet/Form',
+        'dexter'
     ],
-    function ($, PortletForm) {
+    function ($, PortletForm, Dexter) {
         'use strict';
 
         describe('Portlet Form', function () {
