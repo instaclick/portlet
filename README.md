@@ -1,7 +1,7 @@
 portlet
 =======
-[![Build Status](https://secure.travis-ci.org/instaclick/portlet.png)](http://travis-ci.org/instaclick/portlet)
-[![Coverage Status](https://coveralls.io/repos/instaclick/portlet/badge.png)](https://coveralls.io/r/instaclick/portlet)
+[![Build Status](https://api.travis-ci.org/instaclick/portlet.svg)](http://travis-ci.org/instaclick/portlet)
+[![Coverage Status](http://img.shields.io/coveralls/instaclick/portlet.svg)](https://coveralls.io/r/instaclick/portlet)
 
 Client-side support for [Portlet](http://en.wikipedia.org/wiki/Portlet)
 
